@@ -24,7 +24,15 @@ angular.module('ClassPlan', [])
 .controller('TableCtrl', function($scope, Days, Times) {
   $scope.days = Days;
   $scope.times = Times;
-
+  $scope.classBlock = {
+    'Monday': {
+      '10 AM': {
+        'background-color': 'red',
+        'height': '150%',
+        'border': '3px groove red'
+      }
+    }
+  };
 })
 
 ;

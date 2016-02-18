@@ -12,16 +12,25 @@
 
   <body ng-app="ClassPlan">
 
+    <!--
+    <div class="jumbotron">
+      <h1>SDCCD Class Planner</h1>
+    </div>
+    -->
+
     <table ng-controller="TableCtrl"
            class="table table-bordered">
 
-      <tr>
-        <th></th>
-        <th ng-repeat="day in days">{{day}}</th>
-      </tr>
+      <thead>
+        <td></td>
+        <th class="day" ng-repeat="day in days">{{day}}</th>
+      </thead>
+
       <tr ng-repeat="time in times">
-        <th>{{time}}</th>
-        <td ng-repeat="day in days"></td>
+        <th class="time">{{time}}</th>
+        <td ng-repeat="day in days">
+          <div class="fill" ng-style="classBlock[day][time]"></div>
+        </td>
       </tr>
     </table>
 

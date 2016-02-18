@@ -1,0 +1,34 @@
+/* labels */
+th {
+  text-align: center;
+}
+
+/* grid */
+td {
+  padding: 0 !important;
+  height: 50px;
+}
+
+/* first row */
+thead {
+  background-color: #aaa;
+}
+
+/* first column */
+.time {
+  width: 50px;
+}
+
+/* other columns */
+.day {
+  width: 100px;
+}
+
+/* class block */
+.fill {
+  position: relative;
+  z-index: 1; /* hide grid lines */
+
+  /* border: 3px groove; */
+  /* set in template: height, background-color, border */
+}
