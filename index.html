@@ -10,9 +10,20 @@
     <link href="style.css" rel="stylesheet">
   </head>
 
-  <body>
+  <body ng-app="ClassPlan">
 
-    <div class="jumbotrom"><h1>SDCCD Class Planner</h1></div>
+    <table ng-controller="TableCtrl"
+           class="table table-bordered">
+
+      <tr>
+        <th></th>
+        <th ng-repeat="day in days">{{day}}</th>
+      </tr>
+      <tr ng-repeat="time in times">
+        <th>{{time}}</th>
+        <td ng-repeat="day in days"></td>
+      </tr>
+    </table>
 
   </body>
 </html>
