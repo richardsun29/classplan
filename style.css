@@ -28,6 +28,7 @@ thead {
 .fill {
   position: relative;
   z-index: 1; /* hide grid lines */
+  border-radius: 5px;
 
   /* border: 3px groove; */
   /* set in template: height, background-color, border */

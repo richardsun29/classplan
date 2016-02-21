@@ -21,18 +21,56 @@ angular.module('ClassPlan', [])
   return times; // ['7 AM', '8 AM', ..., '10 PM']
 })())
 
-.controller('TableCtrl', function($scope, Days, Times) {
+.controller('TableCtrl', function($scope, Days, Times, TimeBlock) {
   $scope.days = Days;
   $scope.times = Times;
-  $scope.classBlock = {
-    'Monday': {
-      '10 AM': {
-        'background-color': 'red',
-        'height': '150%',
-        'border': '3px groove red'
-      }
-    }
+  $scope.classBlock = TimeBlock.get();
+  TimeBlock.set(Days[0], {h: 9, m: 45}, {h: 13, m: 20}, 'red');
+})
+
+.factory('TimeBlock', function(Days, Times) {
+  var blocks = {};
+
+  var get = function() {
+    return blocks;
   };
+
+  /* minutes -> percent */
+  var toPercent = function(minutes) {
+    return (minutes / 60 * 100) + '%';
+  };
+
+  /* time difference */
+  var blockSize = function(start, end) {
+    var diff = (end.h - start.h) * 60 + (end.m - start.m); // minutes
+    return toPercent(diff);
+  };
+
+  var set = function(day, startTime, endTime, color) {
+    var borderStyle = '0px groove ';
+
+    if (!blocks[day])
+      blocks[day] = {};
+
+    var timeString = Times[startTime.h - 7];
+    blocks[day][timeString] = {
+      'background-color': color,
+
+      'border': borderStyle + color,
+
+      // offset of start
+      'top': toPercent(startTime.m),
+
+      // size of block
+      'height': blockSize(startTime, endTime)
+
+    };
+  };
+
+  return {
+    get: get,
+    set: set
+  }
 })
 
 ;
