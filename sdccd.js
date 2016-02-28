@@ -26,6 +26,7 @@ angular.module('ClassPlan', [])
   $scope.times = Times;
   $scope.classBlock = TimeBlock.get();
   TimeBlock.set({
+    label: 'Math 145\nCalculus',
     day: 0,
     start: {h: 9, m: 45},
     end: {h: 13, m: 20},
@@ -81,18 +82,20 @@ angular.module('ClassPlan', [])
    */
 
   var set = function(block) {
+    var label = block.label;
     var day = Days[block.day];
     var start = block.start;
     var end = block.end;
     var color = block.color;
 
     var borderStyle = '0px groove ';
+    var startHour = Times[start.h - 7];
 
     if (!blocks[day])
       blocks[day] = {};
-    console.log(Times[start.h - 7]);
-    var startHour = Times[start.h - 7];
-    blocks[day][startHour] = {
+
+    // create new block's style
+    var style = {
       'background-color': color,
 
       'border': borderStyle + color,
@@ -103,6 +106,11 @@ angular.module('ClassPlan', [])
       // size of block
       'height': blockSize(start, end)
 
+    };
+
+    blocks[day][startHour] = {
+      style: style,
+      label: label
     };
   };
 

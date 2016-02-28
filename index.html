@@ -4,7 +4,6 @@
     <title>SDCCD Class Planner</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
     <script src="sdccd.js"></script>
     <link href="style.css" rel="stylesheet">
@@ -18,8 +17,7 @@
     </div>
     -->
 
-    <table ng-controller="TableCtrl"
-           class="table table-bordered">
+    <table ng-controller="TableCtrl">
 
       <thead>
         <td></td>
@@ -28,8 +26,10 @@
 
       <tr ng-repeat="time in times">
         <th class="time">{{time}}</th>
-        <td ng-repeat="day in days">
-          <div class="fill" ng-style="classBlock[day][time]"></div>
+        <td ng-repeat="day in days" ng-init="block=classBlock[day][time]">
+          <div class="fill" ng-style="block.style">
+            <p>{{block.label}}</p>
+          </div>
         </td>
       </tr>
     </table>
