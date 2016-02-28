@@ -25,7 +25,27 @@ angular.module('ClassPlan', [])
   $scope.days = Days;
   $scope.times = Times;
   $scope.classBlock = TimeBlock.get();
-  TimeBlock.set(Days[0], {h: 9, m: 45}, {h: 13, m: 20}, 'red');
+  TimeBlock.set({
+    day: 0,
+    start: {h: 9, m: 45},
+    end: {h: 13, m: 20},
+    color: 'red'
+  });
+})
+
+.factory('Schedule', function(TimeBlock, Days, Times) {
+  var blocks = {};
+  var removeBlock = function(name) {
+    delete blocks[name];
+  };
+  var addBlock = function(name, timeBlocks) {
+    blocks[name] = timeBlocks;
+  };
+
+  return {
+    remove: removeBlock,
+    get: function() { return classes; },
+  };
 })
 
 .factory('TimeBlock', function(Days, Times) {
@@ -40,29 +60,48 @@ angular.module('ClassPlan', [])
     return (minutes / 60 * 100) + '%';
   };
 
+  /* minutes -> pixels */
+  var toPixels = function(minutes) {
+    var blockHeight = 50; // 50px
+    return (minutes / 60 * blockHeight) + 'px';
+  };
+
   /* time difference */
   var blockSize = function(start, end) {
     var diff = (end.h - start.h) * 60 + (end.m - start.m); // minutes
     return toPercent(diff);
   };
 
-  var set = function(day, startTime, endTime, color) {
+  /* block = {
+   *   day: index of Days,
+   *   start: {h, m},
+   *   end: {h, m},
+   *   color: string,
+   * }
+   */
+
+  var set = function(block) {
+    var day = Days[block.day];
+    var start = block.start;
+    var end = block.end;
+    var color = block.color;
+
     var borderStyle = '0px groove ';
 
     if (!blocks[day])
       blocks[day] = {};
-
-    var timeString = Times[startTime.h - 7];
-    blocks[day][timeString] = {
+    console.log(Times[start.h - 7]);
+    var startHour = Times[start.h - 7];
+    blocks[day][startHour] = {
       'background-color': color,
 
       'border': borderStyle + color,
 
       // offset of start
-      'top': toPercent(startTime.m),
+      'top': toPixels(start.m),
 
       // size of block
-      'height': blockSize(startTime, endTime)
+      'height': blockSize(start, end)
 
     };
   };
