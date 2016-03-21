@@ -1,3 +1,4 @@
+'use strict';
 angular.module('ClassPlan', [])
 
 .constant('Days', [
@@ -21,31 +22,57 @@ angular.module('ClassPlan', [])
   return times; // ['7 AM', '8 AM', ..., '10 PM']
 })())
 
-.controller('TableCtrl', function($scope, Days, Times, TimeBlock) {
+.controller('TableCtrl', function($scope, Days, Times, TimeBlock, Schedule) {
   $scope.days = Days;
   $scope.times = Times;
   $scope.classBlock = TimeBlock.get();
-  TimeBlock.set({
+  Schedule.addClass(0, 'Math\nCalc', 'MWF', {h:9, m:45}, {h:12,m:0}, 'blue');
+  /*TimeBlock.add({
     label: 'Math 145\nCalculus',
     day: 0,
     start: {h: 9, m: 45},
     end: {h: 13, m: 20},
     color: 'red'
-  });
+  });*/
 })
 
 .factory('Schedule', function(TimeBlock, Days, Times) {
-  var blocks = {};
-  var removeBlock = function(name) {
-    delete blocks[name];
-  };
-  var addBlock = function(name, timeBlocks) {
-    blocks[name] = timeBlocks;
+  var classes = {};
+
+  /* Add or overwrite a class
+   * id: unique number
+   * days: string of 'MTWRF'
+   * start, end: {h, m}
+   * color: CSS color string
+   */
+  var addClass = function(id, label, days, start, end, color) {
+    classes[id] = [];
+    for (var i in days) {
+      var day;
+      switch(days[i]) {
+        case 'M': day = 0; break;
+        case 'T': day = 1; break;
+        case 'W': day = 2; break;
+        case 'R': day = 3; break;
+        case 'F': day = 4; break;
+        default: console.error("Unknown day in", days);
+      }
+      var block = {
+        label: label,
+        day: day,
+        start: start,
+        end: end,
+        color: color
+      };
+      classes[id].push(block);
+      TimeBlock.add(block);
+    }
   };
 
   return {
-    remove: removeBlock,
-    get: function() { return classes; },
+    addClass: addClass,
+    removeClass: function(id) { delete classes[id] },
+    get: function() { return classes; }
   };
 })
 
@@ -81,7 +108,7 @@ angular.module('ClassPlan', [])
    * }
    */
 
-  var set = function(block) {
+  var add = function(block) {
     var label = block.label;
     var day = Days[block.day];
     var start = block.start;
@@ -116,7 +143,7 @@ angular.module('ClassPlan', [])
 
   return {
     get: get,
-    set: set
+    add: add
   }
 })
 
