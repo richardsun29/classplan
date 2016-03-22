@@ -26,52 +26,85 @@ angular.module('ClassPlan', [])
   $scope.days = Days;
   $scope.times = Times;
   $scope.classBlock = TimeBlock.get();
-  Schedule.addClass(0, 'Math\nCalc', 'MWF', {h:9, m:45}, {h:12,m:0}, 'blue');
-  /*TimeBlock.add({
-    label: 'Math 145\nCalculus',
-    day: 0,
-    start: {h: 9, m: 45},
-    end: {h: 13, m: 20},
-    color: 'red'
-  });*/
+  Schedule.addClass(0,
+      'Math\nCalc',
+      {M: true, W: false, F: true},
+      {h:9, m:45},
+      {h:12,m:0},
+      'blue');
+  Schedule.addClass(1,
+      'Math\nCalc',
+      {M: false, T: true, F: true},
+      {h:13, m:45},
+      {h:15,m:0},
+      'red');
+})
+
+.controller('InputCtrl', function($scope, Schedule) {
+  $scope.schedule = Schedule.get();
 })
 
 .factory('Schedule', function(TimeBlock, Days, Times) {
   var classes = {};
 
+  var day2ind = function(day) {
+      switch(day) {
+        case 'M': return 0;
+        case 'T': return 1;
+        case 'W': return 2;
+        case 'R': return 3;
+        case 'F': return 4;
+        default: console.error("Unknown day in", days);
+      }
+  };
+
   /* Add or overwrite a class
    * id: unique number
-   * days: string of 'MTWRF'
+   * days: {M: true, T: undefined,W,R,F}
    * start, end: {h, m}
    * color: CSS color string
    */
   var addClass = function(id, label, days, start, end, color) {
-    classes[id] = [];
-    for (var i in days) {
-      var day;
-      switch(days[i]) {
-        case 'M': day = 0; break;
-        case 'T': day = 1; break;
-        case 'W': day = 2; break;
-        case 'R': day = 3; break;
-        case 'F': day = 4; break;
-        default: console.error("Unknown day in", days);
-      }
+    removeClass(id); // do any cleanup needed
+
+    classes[id] = {
+        label: label,
+        days: days,
+        start: start,
+        end: end,
+        color: color
+    };
+
+    for (var day in days) {
+      if (!days[day]) continue;
+
       var block = {
         label: label,
-        day: day,
+        day: day2ind(day),
         start: start,
         end: end,
         color: color
       };
-      classes[id].push(block);
+
       TimeBlock.add(block);
     }
   };
 
+  var removeClass = function(id) {
+    var curr = classes[id];
+
+    if (!curr) return;
+
+    for (var day in curr.days) {
+      if (curr.days[day])
+        TimeBlock.remove(day2ind(day), curr.start.h);
+    }
+    delete classes[id];
+  };
+
   return {
     addClass: addClass,
-    removeClass: function(id) { delete classes[id] },
+    removeClass: removeClass,
     get: function() { return classes; }
   };
 })
@@ -141,10 +174,17 @@ angular.module('ClassPlan', [])
     };
   };
 
+  var removeBlock = function(day, startHour) {
+    startHour = Times[startHour - 7];
+    day = Days[day];
+    delete blocks[day][startHour];
+  };
+
   return {
     get: get,
-    add: add
-  }
+    add: add,
+    remove: removeBlock
+  };
 })
 
 ;

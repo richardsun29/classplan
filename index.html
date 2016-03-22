@@ -34,5 +34,11 @@
       </tr>
     </table>
 
+    <div ng-controller="InputCtrl">
+      <h1>Enter your classes</h1>
+      <div ng-repeat="class in schedule" style="border: 1px solid">
+        <label>Label: </label><textarea ng-model="class.label"></textarea>
+      </div>
+    </div>
   </body>
 </html>
