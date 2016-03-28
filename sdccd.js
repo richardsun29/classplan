@@ -42,6 +42,7 @@ angular.module('ClassPlan', [])
 
 .controller('InputCtrl', function($scope, Schedule) {
   $scope.schedule = Schedule.get();
+  $scope.clear =Schedule.clear;
 })
 
 .factory('Schedule', function(TimeBlock, Days, Times) {
@@ -102,9 +103,15 @@ angular.module('ClassPlan', [])
     delete classes[id];
   };
 
+  var clear = function() {
+    classes = {};
+    TimeBlock.clear();
+  };
+
   return {
     addClass: addClass,
     removeClass: removeClass,
+    clear: clear,
     get: function() { return classes; }
   };
 })
@@ -180,9 +187,16 @@ angular.module('ClassPlan', [])
     delete blocks[day][startHour];
   };
 
+  var clear = function() {
+    for (var day in blocks) {
+      delete blocks[day];
+    }
+  };
+
   return {
     get: get,
     add: add,
+    clear: clear,
     remove: removeBlock
   };
 })

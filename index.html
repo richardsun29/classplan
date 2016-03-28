@@ -26,15 +26,16 @@
 
       <tr ng-repeat="time in times">
         <th class="time">{{time}}</th>
-        <td ng-repeat="day in days" ng-init="block=classBlock[day][time]">
-          <div class="fill" ng-style="block.style">
-            <p>{{block.label}}</p>
+        <td ng-repeat="day in days">
+          <div class="fill" ng-style="classBlock[day][time].style">
+            <p>{{classBlock[day][time].label}}</p>
           </div>
         </td>
       </tr>
     </table>
 
     <div ng-controller="InputCtrl">
+      <button ng-click="clear()">Clear</button>
       <h1>Enter your classes</h1>
       <div ng-repeat="class in schedule" style="border: 1px solid">
         <label>Label: </label><textarea ng-model="class.label"></textarea>
