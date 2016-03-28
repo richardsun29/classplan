@@ -1,9 +1,9 @@
 'use strict';
 angular.module('ClassPlan', [])
 
-.constant('Days', [
-  'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'
-])
+.constant('Days', {
+  'M': 'Monday', 'T': 'Tuesday', 'W': 'Wednesday', 'R': 'Thursday', 'F': 'Friday'
+})
 
 .constant('Times', (function() {
   var times = [];
@@ -38,6 +38,7 @@ angular.module('ClassPlan', [])
       {h:13, m:45},
       {h:15,m:0},
       'red');
+  console.log($scope.classBlock);
 })
 
 .controller('InputCtrl', function($scope, Schedule) {
@@ -45,19 +46,8 @@ angular.module('ClassPlan', [])
   $scope.clear =Schedule.clear;
 })
 
-.factory('Schedule', function(TimeBlock, Days, Times) {
+.factory('Schedule', function(TimeBlock) {
   var classes = {};
-
-  var day2ind = function(day) {
-      switch(day) {
-        case 'M': return 0;
-        case 'T': return 1;
-        case 'W': return 2;
-        case 'R': return 3;
-        case 'F': return 4;
-        default: console.error("Unknown day in", days);
-      }
-  };
 
   /* Add or overwrite a class
    * id: unique number
@@ -66,7 +56,6 @@ angular.module('ClassPlan', [])
    * color: CSS color string
    */
   var addClass = function(id, label, days, start, end, color) {
-    removeClass(id); // do any cleanup needed
 
     classes[id] = {
         label: label,
@@ -76,31 +65,7 @@ angular.module('ClassPlan', [])
         color: color
     };
 
-    for (var day in days) {
-      if (!days[day]) continue;
-
-      var block = {
-        label: label,
-        day: day2ind(day),
-        start: start,
-        end: end,
-        color: color
-      };
-
-      TimeBlock.add(block);
-    }
-  };
-
-  var removeClass = function(id) {
-    var curr = classes[id];
-
-    if (!curr) return;
-
-    for (var day in curr.days) {
-      if (curr.days[day])
-        TimeBlock.remove(day2ind(day), curr.start.h);
-    }
-    delete classes[id];
+    TimeBlock.add(classes[id], days);
   };
 
   var clear = function() {
@@ -110,7 +75,6 @@ angular.module('ClassPlan', [])
 
   return {
     addClass: addClass,
-    removeClass: removeClass,
     clear: clear,
     get: function() { return classes; }
   };
@@ -148,9 +112,8 @@ angular.module('ClassPlan', [])
    * }
    */
 
-  var add = function(block) {
+  var add = function(block, days) {
     var label = block.label;
-    var day = Days[block.day];
     var start = block.start;
     var end = block.end;
     var color = block.color;
@@ -175,16 +138,17 @@ angular.module('ClassPlan', [])
 
     };
 
-    blocks[day][startHour] = {
+    var block = {
       style: style,
       label: label
     };
-  };
 
-  var removeBlock = function(day, startHour) {
-    startHour = Times[startHour - 7];
-    day = Days[day];
-    delete blocks[day][startHour];
+    for (var day in days) {
+      if (!days[day]) continue;
+      var fullName = Days[day];
+      blocks[fullName] = blocks[fullName] || {};
+      blocks[fullName][startHour] = block;
+    }
   };
 
   var clear = function() {
@@ -197,7 +161,6 @@ angular.module('ClassPlan', [])
     get: get,
     add: add,
     clear: clear,
-    remove: removeBlock
   };
 })
 

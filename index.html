@@ -38,6 +38,7 @@
       <button ng-click="clear()">Clear</button>
       <h1>Enter your classes</h1>
       <div ng-repeat="class in schedule" style="border: 1px solid">
+        {{class}}
         <label>Label: </label><textarea ng-model="class.label"></textarea>
       </div>
     </div>
