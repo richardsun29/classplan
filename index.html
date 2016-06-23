@@ -17,7 +17,61 @@
     </div>
     -->
 
-    <table ng-controller="TableCtrl">
+
+
+    <!--
+    classes[id] = {
+        label: label,
+        days: days,
+        start: start,
+        end: end,
+        color: color
+    };
+    -->
+
+    <div ng-controller="InputCtrl" class="class-input">
+      <h1>Enter your classes</h1>
+      <table>
+        <thead>
+          <th>Label</th>
+          <th>Days</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Color</th>
+        </thead>
+        <tr ng-repeat="class in schedule">
+          <td>
+            <textarea ng-model="class.label"></textarea>
+          </td>
+          <td>
+            <span ng-repeat="day in 'MTWRF'">
+              <input type="checkbox">{{day}}
+            </span>
+          </td>
+          <td>
+            <input type="time">
+          </td>
+          <td>
+            <input type="time">
+          </td>
+          <td>
+            <input type="color">
+          </td>
+          <td>
+            <button title="Delete Class" class="del-btn">&times;</button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="5">
+            <button class="add-btn">Add a Class</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div style="height: 40px"></div>
+
+    <table ng-controller="TableCtrl" class="calendar">
 
       <thead>
         <td></td>
@@ -34,11 +88,5 @@
       </tr>
     </table>
 
-    <div ng-controller="InputCtrl">
-      <h1>Enter your classes</h1>
-      <div ng-repeat="class in schedule" style="border: 1px solid">
-        <label>Label: </label><textarea ng-model="class.label"></textarea>
-      </div>
-    </div>
   </body>
 </html>

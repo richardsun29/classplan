@@ -40,6 +40,16 @@ angular.module('ClassPlan', [])
       'red');
 })
 
+/*
+    classes[id] = {
+        label: label,
+        days: days,
+        start: start,
+        end: end,
+        color: color
+    };
+*/
+
 .controller('InputCtrl', function($scope, Schedule) {
   $scope.schedule = Schedule.get();
 })

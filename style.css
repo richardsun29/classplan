@@ -8,24 +8,46 @@ table {
   border-collapse: collapse;
 }
 
-/* labels */
-th {
+
+/* CLASS INPUT */
+.class-input thead {
 }
 
 /* grid */
-td {
+.class-input td {
+  height: 50px;
+  position: relative;
+}
+
+.class-input td, .class-input th {
+  border: 1px solid #222;
+  padding: 5px 10px;
+}
+
+.class-input .add-btn {
+  padding: 10px;
+}
+
+.class-input .del-btn {
+  font-size: large;
+}
+
+/* CALENDAR */
+
+/* first row */
+.calendar thead {
+  background-color: #aaa;
+}
+
+/* grid */
+.calendar td {
   padding: 0 !important;
   height: 50px;
   position: relative;
 }
 
-td, th {
+.calendar td, .calendar th {
   border: 1px solid #666;
-}
-
-/* first row */
-thead {
-  background-color: #aaa;
 }
 
 /* first column */
