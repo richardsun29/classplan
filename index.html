@@ -44,26 +44,26 @@
             <textarea ng-model="class.label"></textarea>
           </td>
           <td>
-            <span ng-repeat="day in 'MTWRF'">
-              <input type="checkbox">{{day}}
-            </span>
+            <label ng-repeat="day in 'MTWRF'" style="padding: 0 2px">
+              <input type="checkbox" ng-model="class.days[day]">{{day}}
+            </label>
           </td>
           <td>
-            <input type="time">
+            <input type="time" ng-model="class.start">
           </td>
           <td>
-            <input type="time">
+            <input type="time" ng-model="class.end">
           </td>
           <td>
-            <input type="color">
+            <input type="color" ng-model="class.color">
           </td>
           <td>
-            <button title="Delete Class" class="del-btn">&times;</button>
+            <button title="Delete Class" class="del-btn" ng-click="deleteClass()">&times;</button>
           </td>
         </tr>
         <tr>
           <td colspan="5">
-            <button class="add-btn">Add a Class</button>
+            <button class="add-btn" ng-click="addClass()">Add a Class</button>
           </td>
         </tr>
       </table>

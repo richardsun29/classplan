@@ -51,7 +51,28 @@ angular.module('ClassPlan', [])
 */
 
 .controller('InputCtrl', function($scope, Schedule) {
-  $scope.schedule = Schedule.get();
+  $scope.schedule = [];
+
+  $scope.addClass = function() {
+    var sevenAM = new Date(0);
+    sevenAM.setHours(7);
+    var eightAM = new Date(0);
+    eightAM.setHours(8);
+
+    var defaultClass = {
+      label: "Class\nRoom",
+      days: {},
+      start: sevenAM,
+      end: eightAM,
+      color: "#bf5d5d",
+    };
+
+    $scope.schedule.push(defaultClass);
+
+    console.log($scope.schedule);
+  };
+
+  //$scope.schedule = Schedule.get();
 })
 
 .factory('Schedule', function(TimeBlock, Days, Times) {
