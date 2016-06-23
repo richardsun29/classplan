@@ -16,6 +16,7 @@ th {
 td {
   padding: 0 !important;
   height: 50px;
+  position: relative;
 }
 
 td, th {
@@ -42,7 +43,7 @@ thead {
 /* class block */
 .fill {
   width: 100px;
-  position: relative;
+  position: absolute;
   z-index: 1; /* hide grid lines */
   border-radius: 5px;
 

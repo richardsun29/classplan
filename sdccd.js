@@ -130,7 +130,7 @@ angular.module('ClassPlan', [])
   /* time difference */
   var blockSize = function(start, end) {
     var diff = (end.h - start.h) * 60 + (end.m - start.m); // minutes
-    return toPercent(diff);
+    return toPixels(diff);
   };
 
   /* block = {
