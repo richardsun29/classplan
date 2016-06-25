@@ -59,18 +59,32 @@ angular.module('ClassPlan', [])
     var eightAM = new Date(0);
     eightAM.setHours(8);
 
+    var randColor = function() {
+      // random hex string
+      var max = parseInt('ffffff', 16);
+      var color = Math.floor(Math.random() * max).toString(16);
+      // pad to 6 digits
+      while (color.length < 6)
+        color = '0' + color;
+      return '#' + color;
+    };
+
     var defaultClass = {
-      label: "Class\nRoom",
+      label: "",
       days: {},
       start: sevenAM,
       end: eightAM,
-      color: "#bf5d5d",
+      color: randColor(),
     };
 
     $scope.schedule.push(defaultClass);
 
     console.log($scope.schedule);
   };
+
+  $scope.deleteClass = function(index) {
+    $scope.schedule.splice(index, 1);
+  }
 
   //$scope.schedule = Schedule.get();
 })

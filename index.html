@@ -58,12 +58,17 @@
             <input type="color" ng-model="class.color">
           </td>
           <td>
-            <button title="Delete Class" class="del-btn" ng-click="deleteClass()">&times;</button>
+            <button title="Delete Class" class="del-btn" ng-click="deleteClass($index)">&times;</button>
           </td>
         </tr>
         <tr>
           <td colspan="5">
             <button class="add-btn" ng-click="addClass()">Add a Class</button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="5">
+            {{schedule}}
           </td>
         </tr>
       </table>
