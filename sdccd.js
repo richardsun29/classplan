@@ -183,8 +183,8 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
     var borderStyle = '0px groove ';
     var startHour = Times[start.getHours() - 7];
 
-    if (!blocks[day])
-      blocks[day] = {};
+    blocks[day] = blocks[day] || {};
+    blocks[day][startHour] = blocks[day][startHour] || [];
 
     // create new block's style
     var style = {
@@ -197,14 +197,12 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
 
       // size of block
       'height': blockSize(start, end),
-
-      'visibility': 'visible'
     };
 
-    blocks[day][startHour] = {
+    blocks[day][startHour].push({
       style: style,
       label: label
-    };
+    });
   };
 
   // clear the calendar, but use the same blocks object

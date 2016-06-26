@@ -85,9 +85,10 @@
 
       <tr ng-repeat="time in times">
         <th class="time">{{time}}</th>
-        <td ng-repeat="day in days" ng-init="block=classBlock[day][time]">
-          <div class="fill" ng-style="classBlock[day][time].style">
-            <p>{{classBlock[day][time].label}}</p>
+        <td ng-repeat="day in days">
+          <div class="fill" ng-repeat="block in classBlock[day][time]"
+            ng-style="block.style">
+            <p>{{block.label}}</p>
           </div>
         </td>
       </tr>
