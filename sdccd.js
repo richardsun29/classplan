@@ -34,29 +34,21 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
   $scope.days = Days;
   $scope.times = Times;
   $scope.classBlock = TimeBlock.get();
-  Schedule.addClass(0,
-      'Math\nCalc',
-      {M: true, W: false, F: true},
-      date(9, 45),
-      date(12, 0),
-      'blue');
-  Schedule.addClass(1,
-      'Math\nCalc',
-      {M: false, T: true, F: true},
-      date(10, 45),
-      date(15, 0),
-      'red');
+  Schedule.addClass({
+    label: 'Math\nCalc',
+    days: {M: true, W: false, F: true},
+    start: date(9, 45),
+    end: date(12, 0),
+    color: 'blue'
+  });
+  Schedule.addClass({
+    label: 'Math\nCalc',
+    days: {M: false, T: true, F: true},
+    start: date(10, 45),
+    end: date(15, 0),
+    color: 'red'
+  });
 })
-
-/*
-    classes[id] = {
-        label: label,
-        days: days,
-        start: start,
-        end: end,
-        color: color
-    };
-*/
 
 .controller('InputCtrl', function($scope, Schedule, date) {
   $scope.schedule = [];
@@ -82,8 +74,6 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
     };
 
     $scope.schedule.push(defaultClass);
-
-    console.log($scope.schedule);
   };
 
   $scope.deleteClass = function(index) {
@@ -91,10 +81,13 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
   }
 
   //$scope.schedule = Schedule.get();
+  $scope.apply = function() {
+    Schedule.set($scope.schedule);
+  };
 })
 
 .factory('Schedule', function(TimeBlock, Days, Times) {
-  var classes = {};
+  //var classes = {};
 
   var day2ind = function(day) {
       switch(day) {
@@ -107,53 +100,41 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
       }
   };
 
-  /* Add or overwrite a class
-   * id: unique number
-   * days: {M: true, T: undefined,W,R,F}
-   * start, end: {h, m}
-   * color: CSS color string
+  /* class = { label: "",
+   * days: {'M': true},
+   * start: date,
+   * end: date,
+   * color: '#ffffff'
+   * };
    */
-  var addClass = function(id, label, days, start, end, color) {
-    removeClass(id); // do any cleanup needed
 
-    classes[id] = {
-        label: label,
-        days: days,
-        start: start,
-        end: end,
-        color: color
-    };
-
-    for (var day in days) {
-      if (!days[day]) continue;
+  var addClass = function(c) {
+    for (var day in c.days) {
+      if (!c.days[day])
+        continue;
 
       var block = {
-        label: label,
+        label: c.label,
         day: day2ind(day),
-        start: start,
-        end: end,
-        color: color
+        start: c.start,
+        end: c.end,
+        color: c.color
       };
 
       TimeBlock.add(block);
     }
   };
 
-  var removeClass = function(id) {
-    var curr = classes[id];
-
-    if (!curr) return;
-
-    for (var day in curr.days) {
-      if (curr.days[day])
-        TimeBlock.remove(day2ind(day), curr.start.h);
-    }
-    delete classes[id];
+  var set = function(schedule) {
+    TimeBlock.reset();
+    schedule.forEach(function(c) {
+      addClass(c);
+    });
   };
 
   return {
     addClass: addClass,
-    removeClass: removeClass,
+    set: set,
     get: function() { return classes; }
   };
 })
@@ -215,8 +196,9 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
       'top': toPixels(start.getMinutes()),
 
       // size of block
-      'height': blockSize(start, end)
+      'height': blockSize(start, end),
 
+      'visibility': 'visible'
     };
 
     blocks[day][startHour] = {
@@ -225,16 +207,17 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
     };
   };
 
-  var removeBlock = function(day, startHour) {
-    startHour = Times[startHour - 7];
-    day = Days[day];
-    delete blocks[day][startHour];
+  // clear the calendar, but use the same blocks object
+  var reset = function() {
+    for (var day in blocks) {
+      blocks[day] = {};
+    }
   };
 
   return {
     get: get,
     add: add,
-    remove: removeBlock
+    reset: reset
   };
 })
 

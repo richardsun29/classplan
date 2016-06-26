@@ -68,6 +68,11 @@
         </tr>
         <tr>
           <td colspan="5">
+            <button class="add-btn" ng-click="apply()">Apply</button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="5">
             {{schedule}}
           </td>
         </tr>
@@ -86,8 +91,8 @@
       <tr ng-repeat="time in times">
         <th class="time">{{time}}</th>
         <td ng-repeat="day in days" ng-init="block=classBlock[day][time]">
-          <div class="fill" ng-style="block.style">
-            <p>{{block.label}}</p>
+          <div class="fill" ng-style="classBlock[day][time].style">
+            <p>{{classBlock[day][time].label}}</p>
           </div>
         </td>
       </tr>
