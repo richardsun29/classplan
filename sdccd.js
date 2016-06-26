@@ -165,6 +165,20 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
     return toPixels(diff);
   };
 
+  var darken = function(color, amt) {
+    var num = parseInt(color.slice(1), 16);
+    var r = (num >> 16) - amt;
+    if (r < 0) r = 0;
+    var b = ((num >> 8) & 0xff) - amt;
+    if (b < 0) b = 0;
+    var g = (num & 0xff) - amt;
+    if (g < 0) g = 0;
+    var str = (g + (b * 256) + (r * 256*256)).toString(16);
+    while (str.length < 6)
+      str = '0' + str;
+    return '#' + str;
+  }
+
   /* block = {
    *   day: index of Days,
    *   start: {h, m},
@@ -180,7 +194,7 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
     var end = block.end;
     var color = block.color;
 
-    var borderStyle = '0px groove ';
+    //var borderStyle = '2px solid ';
     var startHour = Times[start.getHours() - 7];
 
     blocks[day] = blocks[day] || {};
@@ -190,7 +204,7 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
     var style = {
       'background-color': color,
 
-      'border': borderStyle + color,
+      //'border': borderStyle + darken(color, 20),
 
       // offset of start
       'top': toPixels(start.getMinutes()),
