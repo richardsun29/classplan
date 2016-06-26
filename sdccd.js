@@ -22,21 +22,29 @@ angular.module('ClassPlan', [])
   return times; // ['7 AM', '8 AM', ..., '10 PM']
 })())
 
-.controller('TableCtrl', function($scope, Days, Times, TimeBlock, Schedule) {
+.constant('date', function(hours, minutes) {
+    var date = new Date(0);
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    return date;
+})
+
+.controller('TableCtrl',
+function($scope, Days, Times, TimeBlock, Schedule, date) {
   $scope.days = Days;
   $scope.times = Times;
   $scope.classBlock = TimeBlock.get();
   Schedule.addClass(0,
       'Math\nCalc',
       {M: true, W: false, F: true},
-      {h:9, m:45},
-      {h:12,m:0},
+      date(9, 45),
+      date(12, 0),
       'blue');
   Schedule.addClass(1,
       'Math\nCalc',
       {M: false, T: true, F: true},
-      {h:13, m:45},
-      {h:15,m:0},
+      date(10, 45),
+      date(15, 0),
       'red');
 })
 
@@ -50,14 +58,10 @@ angular.module('ClassPlan', [])
     };
 */
 
-.controller('InputCtrl', function($scope, Schedule) {
+.controller('InputCtrl', function($scope, Schedule, date) {
   $scope.schedule = [];
 
   $scope.addClass = function() {
-    var sevenAM = new Date(0);
-    sevenAM.setHours(7);
-    var eightAM = new Date(0);
-    eightAM.setHours(8);
 
     var randColor = function() {
       // random hex string
@@ -72,8 +76,8 @@ angular.module('ClassPlan', [])
     var defaultClass = {
       label: "",
       days: {},
-      start: sevenAM,
-      end: eightAM,
+      start: date(7, 0),
+      end: date(8, 0),
       color: randColor(),
     };
 
@@ -174,7 +178,9 @@ angular.module('ClassPlan', [])
 
   /* time difference */
   var blockSize = function(start, end) {
-    var diff = (end.h - start.h) * 60 + (end.m - start.m); // minutes
+    var e = {h: end.getHours(), m: end.getMinutes()};
+    var s = {h: start.getHours(), m: start.getMinutes()};
+    var diff = (e.h - s.h) * 60 + (e.m - s.m); // minutes
     return toPixels(diff);
   };
 
@@ -194,7 +200,7 @@ angular.module('ClassPlan', [])
     var color = block.color;
 
     var borderStyle = '0px groove ';
-    var startHour = Times[start.h - 7];
+    var startHour = Times[start.getHours() - 7];
 
     if (!blocks[day])
       blocks[day] = {};
@@ -206,7 +212,7 @@ angular.module('ClassPlan', [])
       'border': borderStyle + color,
 
       // offset of start
-      'top': toPixels(start.m),
+      'top': toPixels(start.getMinutes()),
 
       // size of block
       'height': blockSize(start, end)

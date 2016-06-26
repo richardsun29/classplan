@@ -68,6 +68,7 @@ table {
   position: absolute;
   z-index: 1; /* hide grid lines */
   border-radius: 5px;
+  opacity: 0.9;
 
   /* set in template: height, background-color, border */
   display: table;
@@ -78,4 +79,5 @@ table {
   display: table-cell;
   vertical-align: middle;
   white-space: pre-wrap;
+  font-weight: bold;
 }
