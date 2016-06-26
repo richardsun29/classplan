@@ -80,10 +80,10 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
     $scope.schedule.splice(index, 1);
   }
 
-  //$scope.schedule = Schedule.get();
-  $scope.apply = function() {
-    Schedule.set($scope.schedule);
-  };
+  // TODO: throttle updates
+  $scope.$watch('schedule', function(newSchedule) {
+    Schedule.set(newSchedule);
+  }, true);
 })
 
 .factory('Schedule', function(TimeBlock, Days, Times) {
