@@ -8,8 +8,8 @@ angular.module('ClassPlan', [])
 .constant('Times', (function() {
   var times = [];
 
-  var start = 7; // 7 AM
-  var end = 22; // 10 PM
+  var start = 5; // 5 AM
+  var end = 23; // 11 PM
 
   for (var i = start; i <= end; i++) {
     if (i < 12)
@@ -19,7 +19,7 @@ angular.module('ClassPlan', [])
     else
       times.push((i-12) + ' PM');
   }
-  return times; // ['7 AM', '8 AM', ..., '10 PM']
+  return times; // ['5 AM', '6 AM', ..., '11 PM']
 })())
 
 .constant('date', function(hours, minutes) {
@@ -34,20 +34,6 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
   $scope.days = Days;
   $scope.times = Times;
   $scope.classBlock = TimeBlock.get();
-  Schedule.addClass({
-    label: 'Math\nCalc',
-    days: {M: true, W: false, F: true},
-    start: date(9, 45),
-    end: date(12, 0),
-    color: 'blue'
-  });
-  Schedule.addClass({
-    label: 'Math\nCalc',
-    days: {M: false, T: true, F: true},
-    start: date(10, 45),
-    end: date(15, 0),
-    color: 'red'
-  });
 })
 
 .controller('InputCtrl', function($scope, Schedule, date) {
@@ -195,7 +181,7 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
     var color = block.color;
 
     //var borderStyle = '2px solid ';
-    var startHour = Times[start.getHours() - 7];
+    var startHour = Times[start.getHours() - 5];
 
     blocks[day] = blocks[day] || {};
     blocks[day][startHour] = blocks[day][startHour] || [];
