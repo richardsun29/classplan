@@ -215,7 +215,10 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
 
     // styles for inner span
     var spanStyle = {
-      'height': style.height,
+      'height': (function() {
+        var h = parseInt(style.height.slice(0, -2));
+        return (h - 10).toString() + 'px';
+      })()
     };
 
     blocks[day][startHour].push({
