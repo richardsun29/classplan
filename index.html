@@ -88,7 +88,7 @@
         <td ng-repeat="day in days">
           <div class="fill" ng-repeat="block in classBlock[day][time]"
             ng-style="block.style">
-            <p><span ng-style="{height: block.style.height}">{{block.label}}</span></p>
+            <p><span ng-style="block.spanStyle">{{block.label}}</span></p>
           </div>
         </td>
       </tr>
