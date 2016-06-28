@@ -2,7 +2,7 @@
 angular.module('ClassPlan', [])
 
 .constant('Days', [
-  'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'
+  'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
 ])
 
 .constant('Times', (function() {
@@ -80,8 +80,10 @@ function($scope, Days, Times, TimeBlock, Schedule, date) {
         case 'M': return 0;
         case 'T': return 1;
         case 'W': return 2;
-        case 'R': return 3;
+        case 'Th': return 3;
         case 'F': return 4;
+        case 'S': return 5;
+        case 'Su': return 6;
         default: console.error("Unknown day in", days);
       }
   };

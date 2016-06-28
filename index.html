@@ -44,7 +44,7 @@
             <textarea ng-model="class.label"></textarea>
           </td>
           <td>
-            <label ng-repeat="day in 'MTWRF'" style="padding: 0 2px">
+            <label ng-repeat="day in ['M','T','W','Th','F','S','Su']" style="padding: 0 2px">
               <input type="checkbox" ng-model="class.days[day]">{{day}}
             </label>
           </td>
